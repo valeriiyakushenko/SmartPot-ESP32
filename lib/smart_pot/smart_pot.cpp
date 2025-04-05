@@ -8,15 +8,9 @@ DHT dht(DHT_PIN, DHT_TYPE);
 
 int currentPage = 0;
 bool wifiConfigured = false;
-volatile bool buttonPressed = false;
 
-void IRAM_ATTR handleButtonPress() {
-    if (millis() - lastButtonPressTime >= BUTTON_DEBOUNCE_DELAY) {
-        lastButtonPressTime = millis();
-        lastApiUpdateTime = millis();
-        buttonPressed = true;
-    }
-}
+int currentClkState;
+int lastClkState = HIGH;
 
 void setupSmartPot() {
     display.begin();
@@ -25,10 +19,11 @@ void setupSmartPot() {
     wifiConfigured = config.getBool("WiFi", false);
     currentPage = config.getInt("Page", 0);
 
-    pinMode(BUTTON_PIN, INPUT_PULLUP); 
-    attachInterrupt(digitalPinToInterrupt(BUTTON_PIN), handleButtonPress, FALLING);
-
-    if (digitalRead(BUTTON_PIN) == LOW || wifiConfigured == false) {
+    pinMode(CLK_PIN, INPUT_PULLUP);
+    pinMode(DT_PIN, INPUT_PULLUP);
+    pinMode(SW_PIN, INPUT_PULLUP);
+  
+    if (digitalRead(SW_PIN) == LOW || wifiConfigured == false) {
         display.clear();
         if (SCREEN_HEIGHT == 32) {
             display.drawCentered("Configure WiFi...", 1, 4);  
@@ -88,15 +83,26 @@ void setupSmartPot() {
 }
 
 void handlePotControls() {
-    if (buttonPressed) {
-        buttonPressed = false;
-        if (currentPage >= PAGES_COUNT){
-            currentPage = 0;
+    currentClkState = digitalRead(CLK_PIN);
+
+    if (currentClkState != lastClkState && currentClkState == HIGH) {
+        if (digitalRead(DT_PIN) == HIGH) {
+            if (currentPage >= PAGES_COUNT) {
+                currentPage = 0;
+            } else {
+                currentPage++;
+            }
         } else {
-            currentPage++;
+            if (currentPage <= 0) {
+                currentPage = PAGES_COUNT;
+            } else {
+                currentPage--;
+            }
         }
         config.putInt("Page", currentPage);
     }
+
+    lastClkState = currentClkState;
 }
 
 const char* getTimeHM() {
