@@ -4,9 +4,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
-
-#include "../../src/constants.h"
-#include "../config/config.h"
+#include <../../src/constants.h>
 
 class Api {
 private:
@@ -15,14 +13,17 @@ private:
     String password;
     JsonDocument lastJsonDocument;
     bool useAuth;
+    unsigned long lastApiUpdateTime = 0;
+    static const uint16_t HTTP_TIMEOUT_MS = 10000;
 
 public:
     Api(const String& url);
     Api(const String& url, const String& user, const String& pass);
 
     JsonDocument getData();
-    int getInt(const JsonDocument& doc, const String& key);
-    String getString(const JsonDocument& doc, const String& key);
+    int getInt(const JsonDocument& doc, const String& key) const;
+    String getString(const JsonDocument& doc, const String& key) const;
+    bool isError() const;
 };
 
 #endif

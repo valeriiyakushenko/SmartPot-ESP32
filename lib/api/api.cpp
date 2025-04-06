@@ -1,4 +1,4 @@
-#include "api.h"
+#include <api.h>
 
 Api::Api(const String& url) : baseUrl(url), useAuth(false) {}
 
@@ -14,6 +14,8 @@ JsonDocument Api::getData() {
         String fullUrl = baseUrl;
         http.begin(fullUrl);
         
+        http.setTimeout(HTTP_TIMEOUT_MS);
+        
         if (useAuth) {
             http.setAuthorization(login.c_str(), password.c_str());
         }
@@ -21,29 +23,41 @@ JsonDocument Api::getData() {
         int httpCode = http.GET();
         if (httpCode == HTTP_CODE_OK) {
             String payload = http.getString();
-            deserializeJson(doc, payload);
+            DeserializationError error = deserializeJson(doc, payload);
+            
+            if (error) {
+                Serial.print("JSON deserialization failed: ");
+                Serial.println(error.c_str());
+                http.end();
+                return lastJsonDocument;
+            }
         } else {
             Serial.print("HTTP request failed, error: ");
             Serial.println(httpCode);
+            http.end();
+            return lastJsonDocument;
         }
         http.end();
 
         lastJsonDocument = doc;
-        return doc;
     }
     return lastJsonDocument;
 }
 
-int Api::getInt(const JsonDocument& doc, const String& key) {
-    if (doc[key].is<int>()) {
-        return doc[key].as<int>();
+int Api::getInt(const JsonDocument& doc, const String& key) const {
+    if (!doc[key].is<int>()) {
+        return 0;
     }
-    return 0;
+    return doc[key].as<int>();
 }
 
-String Api::getString(const JsonDocument& doc, const String& key) {
-    if (doc[key].is<const char*>()) {
-        return doc[key].as<String>();
+String Api::getString(const JsonDocument& doc, const String& key) const {
+    if (!doc[key].is<const char*>()) {
+        return String();
     }
-    return String("");
+    return doc[key].as<String>();
+}
+
+bool Api::isError() const {
+    return lastJsonDocument.isNull();
 }

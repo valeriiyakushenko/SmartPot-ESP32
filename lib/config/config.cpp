@@ -1,73 +1,68 @@
 #include <config.h>
 
-unsigned long lastApiUpdateTime = 0;
-unsigned long lastButtonPressTime = 0;
+Preferences preferences;
+const char* nameSpace = "Storage";
 
-Config::Config(const char* nameSpace) : namespaceName(nameSpace) {}
-
-Config::~Config() {}
-
-bool Config::getBool(const char* key, bool defaultValue) {
-    preferences.begin(namespaceName, true);
+bool configGetBool(const char* key, bool defaultValue) {
+    preferences.begin(nameSpace, true);
     bool value = preferences.getBool(key, defaultValue);
     preferences.end();
     return value;
-    
 }
 
-int Config::getInt(const char* key, int defaultValue) {
-    preferences.begin(namespaceName, true);
+int configGetInt(const char* key, int defaultValue) {
+    preferences.begin(nameSpace, true);
     int value = preferences.getInt(key, defaultValue);
     preferences.end();
     return value;
 }
 
-float Config::getFloat(const char* key, float defaultValue) {
-    preferences.begin(namespaceName, true);
+float configGetFloat(const char* key, float defaultValue) {
+    preferences.begin(nameSpace, true);
     float value = preferences.getFloat(key, defaultValue);
     preferences.end();
     return value;
 }
 
-String Config::getString(const char* key, const String& defaultValue) {
-    preferences.begin(namespaceName, true);
+String configGetString(const char* key, const String& defaultValue) {
+    preferences.begin(nameSpace, true);
     String result = preferences.getString(key, defaultValue.c_str());
     preferences.end();
     return result;
 }
 
-void Config::putBool(const char* key, bool value) {
-    preferences.begin(namespaceName, false);
+void configPutBool(const char* key, bool value) {
+    preferences.begin(nameSpace, false);
     preferences.putBool(key, value);
     preferences.end();
 }
 
-void Config::putInt(const char* key, int value) {
-    preferences.begin(namespaceName, false);
+void configPutInt(const char* key, int value) {
+    preferences.begin(nameSpace, false);
     preferences.putInt(key, value);
     preferences.end();
 }
 
-void Config::putFloat(const char* key, float value) {
-    preferences.begin(namespaceName, false);
+void configPutFloat(const char* key, float value) {
+    preferences.begin(nameSpace, false);
     preferences.putFloat(key, value);
     preferences.end();
 }
 
-void Config::putString(const char* key, const String& value) {
-    preferences.begin(namespaceName, false);
+void configPutString(const char* key, const String& value) {
+    preferences.begin(nameSpace, false);
     preferences.putString(key, value.c_str());
     preferences.end();
 }
 
-void Config::remove(const char* key) {
-    preferences.begin(namespaceName, false);
+void configRemove(const char* key) {
+    preferences.begin(nameSpace, false);
     preferences.remove(key);
     preferences.end();
 }
 
-void Config::clear() {
-    preferences.begin(namespaceName, false);
+void configClear() {
+    preferences.begin(nameSpace, false);
     preferences.clear();
     preferences.end();
 }

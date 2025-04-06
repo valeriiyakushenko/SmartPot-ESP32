@@ -1,29 +1,20 @@
 #include <smart_pot.h>
 
 Display display(SCREEN_WIDTH, SCREEN_HEIGHT);
-Config config;
 Timezone timeZone;
 WiFiManager wifiManager;
 DHT dht(DHT_PIN, DHT_TYPE);
 
-int currentPage = 0;
 bool wifiConfigured = false;
-
-int currentClkState;
-int lastClkState = HIGH;
 
 void setupSmartPot() {
     display.begin();
     dht.begin();
-    
-    wifiConfigured = config.getBool("WiFi", false);
-    currentPage = config.getInt("Page", 0);
+    initEncoder();
 
-    pinMode(CLK_PIN, INPUT_PULLUP);
-    pinMode(DT_PIN, INPUT_PULLUP);
-    pinMode(SW_PIN, INPUT_PULLUP);
+    wifiConfigured = configGetBool("WiFi", false);
   
-    if (digitalRead(SW_PIN) == LOW || wifiConfigured == false) {
+    if (isEncoderButtonPressed() || wifiConfigured == false) {
         display.clear();
         if (SCREEN_HEIGHT == 32) {
             display.drawCentered("Configure WiFi...", 1, 4);  
@@ -35,7 +26,7 @@ void setupSmartPot() {
         display.update();
         wifiConfigured = false;
         currentPage = 0;
-        config.clear();
+        configClear();
         wifiManager.resetSettings();
         wifiManager.startConfigPortal("SetUp");
     } else {
@@ -66,7 +57,7 @@ void setupSmartPot() {
 
     } else {
         wifiConfigured = true;
-        config.putBool("WiFi", wifiConfigured);
+        configPutBool("WiFi", wifiConfigured);
         display.clear();
         if (SCREEN_HEIGHT == 32) {
             display.drawCentered("WiFi", 1, 4);
@@ -80,29 +71,6 @@ void setupSmartPot() {
         waitForSync();
         timeZone.setLocation(F(TIME_ZONE));
     }
-}
-
-void handlePotControls() {
-    currentClkState = digitalRead(CLK_PIN);
-
-    if (currentClkState != lastClkState && currentClkState == HIGH) {
-        if (digitalRead(DT_PIN) == HIGH) {
-            if (currentPage >= PAGES_COUNT) {
-                currentPage = 0;
-            } else {
-                currentPage++;
-            }
-        } else {
-            if (currentPage <= 0) {
-                currentPage = PAGES_COUNT;
-            } else {
-                currentPage--;
-            }
-        }
-        config.putInt("Page", currentPage);
-    }
-
-    lastClkState = currentClkState;
 }
 
 const char* getTimeHM() {

@@ -1,7 +1,8 @@
 // Screen settings
 #define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
-#define PAGES_COUNT 6 // Update based on your pages -1
+#define SCREEN_HEIGHT 32 // or 64
+#define SCREEN_DRIVER 1306 // or 1106
+#define PAGES_COUNT 2 // Update based on your pages -1
 
 // Rotary Encoder settings
 #define CLK_PIN 33
