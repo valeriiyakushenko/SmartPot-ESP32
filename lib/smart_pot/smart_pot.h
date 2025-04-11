@@ -1,5 +1,3 @@
-#pragma once
-
 #ifndef SMART_POT_H
 #define SMART_POT_H
 
@@ -13,8 +11,6 @@
 #include <config.h>
 #include <display.h>
 #include <encoder.h>
-
-extern Display display;
 
 void setupSmartPot();
 const char* getTimeHM();

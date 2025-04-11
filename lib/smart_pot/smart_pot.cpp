@@ -1,6 +1,5 @@
 #include <smart_pot.h>
 
-Display display(SCREEN_WIDTH, SCREEN_HEIGHT);
 Timezone timeZone;
 WiFiManager wifiManager;
 DHT dht(DHT_PIN, DHT_TYPE);
@@ -8,65 +7,65 @@ DHT dht(DHT_PIN, DHT_TYPE);
 bool wifiConfigured = false;
 
 void setupSmartPot() {
-    display.begin();
-    dht.begin();
+    initDisplay();
     initEncoder();
+    dht.begin();
 
     wifiConfigured = configGetBool("WiFi", false);
   
     if (isEncoderButtonPressed() || wifiConfigured == false) {
-        display.clear();
+        displayClear();
         if (SCREEN_HEIGHT == 32) {
-            display.drawCentered("Configure WiFi...", 1, 4);  
-            display.drawCentered("Connect to: SetUp", 1, 18);
+            displayDrawCentered("Configure WiFi...", 1, 4);  
+            displayDrawCentered("Connect to: SetUp", 1, 18);
         } else {
-            display.drawCentered("Configure WiFi...", 1, 4);  
-            display.drawCentered("Connect to: SetUp", 1, 18);
+            displayDrawCentered("Configure WiFi...", 1, 4);  
+            displayDrawCentered("Connect to: SetUp", 1, 18);
         }
-        display.update();
+        displayUpdate();
         wifiConfigured = false;
         currentPage = 0;
         configClear();
         wifiManager.resetSettings();
         wifiManager.startConfigPortal("SetUp");
     } else {
-        display.clear();
+        displayClear();
         if (SCREEN_HEIGHT == 32) {
-            display.drawCentered("WiFi", 1, 4);
-            display.drawCentered("Connecting...", 1, 18);
+            displayDrawCentered("WiFi", 1, 4);
+            displayDrawCentered("Connecting...", 1, 18);
         } else {
-            display.drawCentered("WiFi", 1, 4);
-            display.drawCentered("Connecting...", 1, 18);
+            displayDrawCentered("WiFi", 1, 4);
+            displayDrawCentered("Connecting...", 1, 18);
         }
-        display.update();
+        displayUpdate();
 
     }
     
     if (!wifiManager.autoConnect()) {
-        display.clear();
+        displayClear();
         if (SCREEN_HEIGHT == 32) {
-            display.drawCentered("WiFi", 1, 4);
-            display.drawCentered("Failed!", 1, 18);
+            displayDrawCentered("WiFi", 1, 4);
+            displayDrawCentered("Failed!", 1, 18);
         } else {
-            display.drawCentered("WiFi", 1, 4);
-            display.drawCentered("Failed!", 1, 18);
+            displayDrawCentered("WiFi", 1, 4);
+            displayDrawCentered("Failed!", 1, 18);
         }
-        display.update();
+        displayUpdate();
         delay(2500);
         ESP.restart();
 
     } else {
         wifiConfigured = true;
         configPutBool("WiFi", wifiConfigured);
-        display.clear();
+        displayClear();
         if (SCREEN_HEIGHT == 32) {
-            display.drawCentered("WiFi", 1, 4);
-            display.drawCentered("Connected!", 1, 18);
+            displayDrawCentered("WiFi", 1, 4);
+            displayDrawCentered("Connected!", 1, 18);
         } else {
-            display.drawCentered("WiFi", 1, 4);
-            display.drawCentered("Connected!", 1, 18);
+            displayDrawCentered("WiFi", 1, 4);
+            displayDrawCentered("Connected!", 1, 18);
         }
-        display.update();
+        displayUpdate();
 
         waitForSync();
         timeZone.setLocation(F(TIME_ZONE));

@@ -1,19 +1,19 @@
 #include <display.h>
 
-Display::Display(int width, int height) : display(width, height, &Wire, OLED_RESET) {
-    screen_width = width;
-    screen_height = height;
-}
+int screen_width = SCREEN_WIDTH;
+int screen_height = SCREEN_HEIGHT;
 
-bool Display::begin() {
+DISPLAY_TYPE display(screen_width, screen_height, &Wire, OLED_RESET);
+
+void initDisplay() {
     if (SCREEN_DRIVER == 1306) {
-        return display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+        display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
     } else if (SCREEN_DRIVER == 1106){
-        return display.begin(SCREEN_ADDRESS, true);
+        display.begin(SCREEN_ADDRESS, true);
     }
 }
 
-void Display::drawCentered(const char* text, int textSize, int y) {
+void displayDrawCentered(const char* text, int textSize, int y) {
     int16_t x1, y1;
     uint16_t textWidth, textHeight;
     
@@ -26,16 +26,16 @@ void Display::drawCentered(const char* text, int textSize, int y) {
     display.println(text);
 }
 
-void Display::draw(const char* text, int textSize, int x, int y) {
+void displayDraw(const char* text, int textSize, int x, int y) {
     display.setTextSize(textSize);
     display.setTextColor(TEXT_COLOR);
     display.setCursor(x, y);
     display.println(text);
 }
 
-void Display::clear() {
+void displayClear() {
     display.clearDisplay();}
 
-void Display::update() {
+void displayUpdate() {
     display.display();
 }

@@ -7,28 +7,27 @@ void setup() {
 }
 
 void loop() {
-    handlePotControls();  // Handle encoder/button inputs
-    display.clear();      // Clear display buffer
+    displayClear();      // Clear display buffer
 
     switch (currentPage) {
         case 0:  // Time HH:MM
-            display.drawCentered(getTimeHM(), 2, 12);
+            displayDrawCentered(getTimeHM(), 2, 12);
             break;
 
         case 1:  // Temperature
-            display.drawCentered(getTemperature(), 2, 4);
-            display.drawCentered("Temperature", 1, 24);
+            displayDrawCentered(getTemperature(), 2, 4);
+            displayDrawCentered("Temperature", 1, 24);
             break;
 
         case 2:  // Get Api
             JsonDocument data = api.getData();
             String value = api.getString(data, "value");
     
-            display.drawCentered(value.c_str(), 1, 14);
+            displayDrawCentered(value.c_str(), 1, 14);
             break;
 
         // Add more cases as needed
     }
 
-	display.update();
+	displayUpdate();
 }

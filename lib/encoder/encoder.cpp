@@ -3,7 +3,7 @@
 EncButton encoder(CLK_PIN, DT_PIN, SW_PIN);
 TaskHandle_t encoderTaskHandle = nullptr;
 
-int currentPage = configGetInt("Page", 0);
+int currentPage = 0;
 
 void handleEncoder(void *pvParameters) {
     for(;;) {
@@ -27,6 +27,7 @@ bool isEncoderButtonPressed() {
 }
 
 void initEncoder() {
+    currentPage = configGetInt("Page", 0);
     xTaskCreatePinnedToCore(
         handleEncoder,
         "EncoderTask",

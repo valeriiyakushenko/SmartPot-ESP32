@@ -19,19 +19,10 @@
   #error "Unsupported display driver. Define SCREEN_DRIVER as either 1306 or 1106"
 #endif
 
-class Display {
-public:
-    Display(int width, int height);
-    bool begin();
-    void drawCentered(const char* text, int textSize, int y);
-    void draw(const char* text, int textSize, int x, int y);
-    void clear();
-    void update();
-
-private:
-    int screen_height;
-    int screen_width;
-    DISPLAY_TYPE display;
-};
+void initDisplay();
+void displayDrawCentered(const char* text, int textSize, int y);
+void displayDraw(const char* text, int textSize, int x, int y);
+void displayClear();
+void displayUpdate();
 
 #endif
