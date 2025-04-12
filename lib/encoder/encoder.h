@@ -3,7 +3,6 @@
 
 #include <EncButton.h>
 #include <config.h>
-#include <../../src/constants.h>
 
 extern int currentPage;
 

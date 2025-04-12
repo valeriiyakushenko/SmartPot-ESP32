@@ -2,14 +2,13 @@
 
 Timezone timeZone;
 WiFiManager wifiManager;
-DHT dht(DHT_PIN, DHT_TYPE);
 
 bool wifiConfigured = false;
 
 void setupSmartPot() {
     initDisplay();
     initEncoder();
-    dht.begin();
+    initSensors();
 
     wifiConfigured = configGetBool("WiFi", false);
   
@@ -82,28 +81,4 @@ const char* getTimeHMS() {
     static char buffer[9];
     snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", timeZone.hour(), timeZone.minute(), timeZone.second());
     return buffer;
-}
-
-const char* getTemperature() {
-    static char buffer[8];
-    float t = dht.readTemperature();
-    
-    if (isnan(t)) {
-        return "Error";
-    } else {
-        snprintf(buffer, sizeof(buffer), "%.1f", t);
-        return buffer;
-    }
-}
-
-const char* getHumidity() {
-    static char buffer[8];
-    float h = dht.readHumidity();
-    
-    if (isnan(h)) {
-        return "Error";
-    } else {
-        snprintf(buffer, sizeof(buffer), "%.1f", h);
-        return buffer;
-    }
 }

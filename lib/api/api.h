@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
-#include <../../src/constants.h>
+#include <config.h>
 
 class Api {
 private:

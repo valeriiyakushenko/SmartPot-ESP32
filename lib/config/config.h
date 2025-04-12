@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Preferences.h>
+#include <../../src/constants.h>
 
 bool configGetBool(const char* key, bool defaultValue = false);
 int configGetInt(const char* key, int defaultValue = 0);

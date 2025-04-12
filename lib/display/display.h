@@ -4,7 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_SH110X.h>
-#include <../../src/constants.h>
+#include <config.h>
 
 #define SCREEN_ADDRESS 0x3C 
 #define OLED_RESET -1
