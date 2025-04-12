@@ -4,10 +4,13 @@ EncButton encoder(CLK_PIN, DT_PIN, SW_PIN);
 TaskHandle_t encoderTaskHandle = nullptr;
 
 int currentPage = 0;
+bool isEncoderButtonPressed = false;
 
 void handleEncoder(void *pvParameters) {
     for(;;) {
         encoder.tick();
+        
+        isEncoderButtonPressed = (digitalRead(SW_PIN) == LOW);
 
         if (encoder.turn()) {
             currentPage += encoder.dir(); 
@@ -21,13 +24,11 @@ void handleEncoder(void *pvParameters) {
     }
 }
 
-bool isEncoderButtonPressed() {
-    encoder.tick();
-    return encoder.pressing();
-}
 
 void initEncoder() {
     currentPage = configGetInt("Page", 0);
+    isEncoderButtonPressed = (digitalRead(SW_PIN) == LOW);
+
     xTaskCreatePinnedToCore(
         handleEncoder,
         "EncoderTask",

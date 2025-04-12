@@ -3,15 +3,13 @@
 
 #include <api.h>
 #include <config.h>
-#include <ezTime.h>
+#include <dt_format.h>
 #include <sensors.h>
 #include <Arduino.h>
 #include <display.h>
 #include <encoder.h>
-#include <WiFiManager.h>
+#include <wifi_setup.h>
 
 void setupSmartPot();
-const char* getTimeHM();
-const char* getTimeHMS();
 
 #endif

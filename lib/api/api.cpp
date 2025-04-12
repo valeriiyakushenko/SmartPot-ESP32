@@ -26,14 +26,10 @@ JsonDocument Api::getData() {
             DeserializationError error = deserializeJson(doc, payload);
             
             if (error) {
-                Serial.print("JSON deserialization failed: ");
-                Serial.println(error.c_str());
                 http.end();
                 return lastJsonDocument;
             }
         } else {
-            Serial.print("HTTP request failed, error: ");
-            Serial.println(httpCode);
             http.end();
             return lastJsonDocument;
         }

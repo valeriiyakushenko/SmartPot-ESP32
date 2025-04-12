@@ -1,10 +1,10 @@
 #ifndef API_H
 #define API_H
 
-#include <Arduino.h>
-#include <ArduinoJson.h>
-#include <HTTPClient.h>
 #include <config.h>
+#include <Arduino.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 
 class Api {
 private:

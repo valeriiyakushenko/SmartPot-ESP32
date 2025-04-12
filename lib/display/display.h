@@ -1,10 +1,10 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
-#include <Adafruit_SH110X.h>
 #include <config.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SH110X.h>
+#include <Adafruit_SSD1306.h>
 
 #define SCREEN_ADDRESS 0x3C 
 #define OLED_RESET -1
